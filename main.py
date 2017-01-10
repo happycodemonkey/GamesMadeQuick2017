@@ -1,7 +1,8 @@
 import pygame, sys
 from pygame.locals import *
-import player
+import player, bullet
 from constants.directions import *
+from constants.colors import *
 
 pygame.init()
 FPS = 30
@@ -13,19 +14,37 @@ BLUE = (0, 0, 128)
 DISPLAYSURF = pygame.display.set_mode((400, 300))
 pygame.display.set_caption('AGDQ Game Jam!')
 
-player = player.Player(400, 300)
+player = player.Player(DISPLAYSURF)
+bullets = []
+
+# get player on the screen initially
+DISPLAYSURF.blit(player.playerSurfObj, player.playerRectObj)
 
 while True:
 	keys = pygame.key.get_pressed()
-	if keys[K_UP] or keys[K_w]:
+	if keys[K_UP]:
+		bullets.append(bullet.Bullet(DISPLAYSURF, player, UP))
+	elif keys[K_w]:
 		player.move(UP)
-	elif keys[K_DOWN] or keys[K_s]:
+	elif keys[K_DOWN]:
+		bullets.append(bullet.Bullet(DISPLAYSURF, player, DOWN))
+	elif keys[K_s]:
 		player.move(DOWN)
-	elif keys[K_LEFT] or keys[K_a]:
+	elif keys[K_LEFT]:
+		bullets.append(bullet.Bullet(DISPLAYSURF, player, LEFT))
+	elif keys[K_a]:
 		player.move(LEFT)
-	elif keys[K_RIGHT] or keys[K_d]:
+	elif keys[K_RIGHT]:
+		bullets.append(bullet.Bullet(DISPLAYSURF, player, RIGHT))
+	elif keys[K_d]:
 		player.move(RIGHT)
-	DISPLAYSURF.blit(player.playerSurfObj, player.playerRectObj)
+	
+	for b in bullets:
+		b.update()
+		
+		if b.remove:
+			bullets.remove(b)
+
 	pygame.display.update()
 	fpsClock.tick(FPS)
 	for event in pygame.event.get():

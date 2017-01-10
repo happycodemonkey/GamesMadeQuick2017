@@ -6,12 +6,11 @@ from constants.directions import *
 
 class Player:
 
-	def __init__(self, screenW, screenH):
+	def __init__(self, surface):
 		self.playerX = 10
 		self.playerY = 10
 
-		self.screenW = screenW
-		self.screenH = screenH
+		self.surface = surface
 		
 		playerObj = pygame.font.Font('freesansbold.ttf', 32)
 		self.playerSurfObj = playerObj.render('@', True, RED, BLACK)
@@ -19,12 +18,14 @@ class Player:
 		self.playerRectObj.center = (self.playerX, self.playerY)
 
 	def move(self, direction):
-		if direction == RIGHT and self.playerX < self.screenW:
+		if direction == RIGHT and self.playerX < self.surface.get_width():
 			self.playerX += 5
-		elif direction == DOWN and self.playerY < self.screenH:
+		elif direction == DOWN and self.playerY < self.surface.get_height():
 			self.playerY += 5
 		elif direction == LEFT and self.playerX > 10:
 			self.playerX -= 5
 		elif direction == UP and self.playerY > 10:
 			self.playerY -= 5
 		self.playerRectObj.center = (self.playerX, self.playerY)
+		self.surface.blit(self.playerSurfObj, self.playerRectObj)
+
