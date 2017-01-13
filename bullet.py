@@ -5,12 +5,12 @@ from constants.colors import *
 class Bullet:
 
 	def __init__(self, surface, player, direction):
-		self.bulletX = player.playerX
-		self.bulletY = player.playerY
+		self.x = player.x
+		self.y = player.y
 		
 		self.surface = surface
 
-		self.bullet = pygame.Rect((self.bulletX, self.bulletY), (5,5))
+		self.bullet = pygame.Rect((self.x, self.y), (5,5))
 
 		self.direction = direction
 		self.remove = False
@@ -27,5 +27,5 @@ class Bullet:
 
 		pygame.draw.rect(self.surface, WHITE, self.bullet)
 
-		if self.bulletX > self.surface.get_width() or self.bulletY > self.surface.get_height() or self.bulletX < 10 or self.bulletY < 10:
+		if self.x > self.surface.get_width() or self.y > self.surface.get_height() or self.x < 10 or self.x < 10:
 			self.remove = True

@@ -1,6 +1,6 @@
 import pygame, sys
 from pygame.locals import *
-import player, bullet
+import player, bullet, enemy
 from constants.directions import *
 from constants.colors import *
 
@@ -16,11 +16,13 @@ pygame.display.set_caption('AGDQ Game Jam!')
 
 player = player.Player(DISPLAYSURF)
 bullets = []
+enemies = []
 
 # get player on the screen initially
 DISPLAYSURF.blit(player.playerSurfObj, player.playerRectObj)
 
 while True:
+	enemies.append(enemy.Enemy(DISPLAYSURF, player))
 	keys = pygame.key.get_pressed()
 	if keys[K_UP]:
 		bullets.append(bullet.Bullet(DISPLAYSURF, player, UP))
@@ -44,6 +46,9 @@ while True:
 		
 		if b.remove:
 			bullets.remove(b)
+	
+	for e in enemies:
+		e.update()
 
 	pygame.display.update()
 	fpsClock.tick(FPS)
