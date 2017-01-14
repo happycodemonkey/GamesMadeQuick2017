@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from constants.colors import *
 from constants.directions import *
+from constants.init import *
 
 
 class Player:
@@ -12,8 +13,7 @@ class Player:
 
 		self.surface = surface
 		
-		playerObj = pygame.font.Font('freesansbold.ttf', 32)
-		self.playerSurfObj = playerObj.render('@', True, RED, BLACK)
+		self.playerSurfObj = FONT.render('@', True, RED, BLACK)
 		self.playerRectObj = self.playerSurfObj.get_rect()
 		self.playerRectObj.center = (self.x, self.y)
 

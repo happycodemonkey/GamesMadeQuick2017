@@ -3,26 +3,26 @@ from pygame.locals import *
 import player, bullet, enemy
 from constants.directions import *
 from constants.colors import *
+from constants.init import *
 
-pygame.init()
+#pygame.init()
 FPS = 30
 fpsClock = pygame.time.Clock()
 
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 128)
 
-DISPLAYSURF = pygame.display.set_mode((400, 300))
+DISPLAYSURF = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('AGDQ Game Jam!')
 
 player = player.Player(DISPLAYSURF)
-bullets = []
+bullets = []	
 enemies = []
 
-# get player on the screen initially
-DISPLAYSURF.blit(player.playerSurfObj, player.playerRectObj)
-
+start = False
 while True:
-	enemies.append(enemy.Enemy(DISPLAYSURF, player))
+	DISPLAYSURF.fill(BLACK)
+	
 	keys = pygame.key.get_pressed()
 	if keys[K_UP]:
 		bullets.append(bullet.Bullet(DISPLAYSURF, player, UP))
@@ -40,18 +40,43 @@ while True:
 		bullets.append(bullet.Bullet(DISPLAYSURF, player, RIGHT))
 	elif keys[K_d]:
 		player.move(RIGHT)
-	
-	for b in bullets:
-		b.update()
+	elif keys[K_RETURN]:
+		start = True
+
+	if start == False:
+		# display the opening screen
+		welcomeSurf = FONT.render('RNGESUS', True, WHITE)
+		welcomeSurfRect = welcomeSurf.get_rect()
+		welcomeSurfRect.center = (WIDTH/2, HEIGHT/2)
+
+		controlsSurf = FONT.render('W-A-S-D to move, Arrows to shoot', True, WHITE)
+		controlsSurfRect = controlsSurf.get_rect()
+		controlsSurfRect.center = (WIDTH/2, (HEIGHT/2) + 50)
+
+		enterSurf = FONT.render('Hit Enter', True, WHITE)
+		enterSurfRect = enterSurf.get_rect()
+		enterSurfRect.center = (WIDTH/2, (HEIGHT/2) + 100)
+
+		DISPLAYSURF.blit(welcomeSurf, welcomeSurfRect)
+		DISPLAYSURF.blit(controlsSurf, controlsSurfRect)
+		DISPLAYSURF.blit(enterSurf, enterSurfRect)
+
+	else:
+		DISPLAYSURF.blit(player.playerSurfObj, player.playerRectObj)
+		enemies.append(enemy.Enemy(DISPLAYSURF, player))
 		
-		if b.remove:
-			bullets.remove(b)
-	
-	for e in enemies:
-		e.update()
+		for b in bullets:
+			b.update()
+			
+			if b.remove:
+				bullets.remove(b)
+		
+		for e in enemies:
+			e.update()
 
 	pygame.display.update()
 	fpsClock.tick(FPS)
+	
 	for event in pygame.event.get():
 		if event.type == QUIT:
 			pygame.quit()
